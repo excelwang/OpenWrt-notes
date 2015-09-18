@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
+		<title>龍泉驛站-访客登录</title>
+		<style>
+			body{
+				background-color: #2c3e50;
+				color: #8c8c8c;
+				text-align: center;
+			}
+			#su{
+				cursor: pointer;
+				width: 70px;
+				height: 30px;
+				line-height: 25px;
+				padding: 0 5px;
+				border: 0;
+				background-color: #5d5ee4;
+				font-size: 15px;
+				color: white;
+				vertical-align: center;
+			}
+			.header{
+				margin:2em auto;
+				max-width: 25em;
+				color: rgb(15, 255, 255);;
+			}
+			h1 div{
+				font-size: small;
+				margin-top: 0.5em;
+			}
+			.discription div{
+				font-size: small;
+				max-width: 13em;
+				margin: 0.5em auto;
+			}
+			.footer{
+				margin:2em auto;
+				max-width:40em;
+			}
+			.footer .site{
+				margin:1em auto;
+			}
+			#linian{
+				margin:1em;
+				text-align: center;
+				font-size: small;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="header">
+			<h1>龍泉驛站<div>传承 分享 互动 智慧</div></h1>
+			<div class="discription">茶道、太极、古琴等传统养生文化的推广平台
+				<div>教育培训 活动会所 商品销售 文化研究 网络社区 众筹平台</div>
+			</div>
+		</div>
+		<div class="content">
+			<!--
+				A client is authenticated by requesting the page http://192.168.10.1:2050/nodogsplash_auth/?redir=http%3A%2F%2Fshop116246695.taobao.com&tok=f71b00f4.
+				So, href to it here, with an img or link text the user can click on.
+				Also, note that any images you reference must reside in the
+				subdirectory that is the value of /images (default: "images").
+			-->
+			<form name="f" id="form" action="$authaction">
+				<input type="hidden" name="tok" value="$tok">
+				<input type="hidden" name="redir" value="$redir">
+				<input type="submit" value="加 入" id="su">
+			</form>
+		</div>
+		<div class="footer">
+ 			<div class="site">官方网站：www.longquanyizhan.com 或 lqyz.org</div>
+ 			<div>北京驿站：海淀区温泉镇白家疃，颐西庄园山上区，南-M17 （010-82469557）</div>
+			<div id="linian">以现代化的运作和管理方式推广中国优秀养生文化，让现代人有渠道、有方法、有次第并且较快地体验到中国传统养生文化的精髓，改善身心健康。——龙泉驿站的理念</div>
+		</div>
+	</body>
+</html>

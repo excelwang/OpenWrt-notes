@@ -1,0 +1,4 @@
+1.安装blkid：opkg install blkid;
+2.把30-block_mount放入 /etc/hotplug.d/block目录下
+3.根据pdf配置脚本。也可直接使用默认配置。
+4.注意，因 openwrt 12.12 之后的kmod-nls-cp936丢失，我不得不修改脚本，增加CHS_ENABLED参数，并将CHS_ENABLED设为0。后果：中文名称的卷标将显示为乱码。

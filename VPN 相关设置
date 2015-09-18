@@ -1,0 +1,47 @@
+1. PPTP VPN 穿透 (允许局域网中的机器连接外部PPTP VPN 服务器) 
+	1.1 放行GRE协议，相关设置如下：
+	#/etc/config/firewall
+	config rule                                     
+	        option target 'ACCEPT'                  
+	        option src 'wan'                        
+	        option proto '47'                       
+	        option name 'Allow-GRE-Protocol'           
+        	option enabled '0'
+	1.2 需要安装 kmod-nf-nathelper-extra（http://wiki.openwrt.org/doc/howto/vpn.nat.pptp）
+
+2. PPTP客户端：
+	2.1 放行GRE协议（见1.1）；
+	2.2 新建PPTP接口:
+	#/etc/config/network
+	config interface 'lab'                         
+        option proto 'pptp'                     
+        option username 'excelwang'            
+        option password '90onw1ndVPN'           
+        option metric '1'                      
+        option server 'lab.flepr.com'           
+    2.3 配置需要走vpn线路的路由。如，访问CNIC SDC内网的VPN配置:                                           
+	config route                                   
+	        option interface 'lab'                 
+	        option target '192.168.0.0/16'          
+	                                              
+	config route                                   
+	        option interface 'lab'                  
+	        option target '10.0.0.0/8'             
+	                                                
+	config route                                    
+	        option interface 'lab'                
+	        option target '159.226.51.0/24'
+	                                                
+	config route                                  
+	        option target '159.226.100.3'          
+	        option interface 'lab'
+    2.4 若要防止该VPN网络主动访问本机，需在防火墙配置中把pptp接口放到wan区；若要打通VPN网络和本地局域网，需在防火墙配置中把pptp接口放到lan区。
+
+3. PPTP服务器：放开 tcp 1723 端口 （pptp服务端口）；放行GRE协议（见2.1）；按如下设置防火墙，以允许VPN客户端上网：
+#/etc/firwall.user
+# Allow all traffic in and out of the ppp interface. No reason to specify nets.
+iptables -A input_rule -i ppp+ -j ACCEPT
+iptables -A output_rule -o ppp+ -j ACCEPT
+# This rule will allow traffic towards internet
+iptables -A forwarding_rule -i ppp+ -j ACCEPT
+iptables -A forwarding_rule -o ppp+ -j ACCEPT

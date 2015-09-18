@@ -1,0 +1,2 @@
+1. opkg install kmod-fs-cifs kmod-nls-utf8 kmod-nls-base kmod-crypto-hmac kmod-crypto-md5 kmod-crypto-misc cifsmount
+2. mount -t cifs //cifs-server/share /localfolder -o user=username,password=password

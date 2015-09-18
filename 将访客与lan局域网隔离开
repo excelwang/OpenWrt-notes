@@ -1,0 +1,28 @@
+1.在luci的interfaces界面增加 guest 接口，并模仿lan进行配置。
+2.在/etc/config/firwall 中增加如下配置：
+config zone
+        option name 'guest'                                         
+        option forward 'REJECT'                 
+        option output 'ACCEPT'                 
+        option input 'REJECT'                   
+        option network 'guest'              
+                                                
+config forwarding                               
+        option dest 'wan'                       
+        option src 'guest'    
+
+config rule                                     
+        option target 'ACCEPT'                  
+        option name 'DNS-guest'                 
+        option proto 'tcp udp'                  
+        option src 'guest'                      
+        option dest_port '53'                   
+                                                
+config rule                                     
+        option target 'ACCEPT'                  
+        option name 'DHCP-guest'                
+        option family 'ipv4'                    
+        option proto 'udp'                      
+        option src 'guest'                      
+        option src_port '67-68'                 
+        option dest_port '67-68'

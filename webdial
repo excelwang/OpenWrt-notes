@@ -1,0 +1,65 @@
+#!/bin/sh
+# Copyright (C) 2015 excelwang
+#webdial
+
+#config
+username="userName=XXX"
+password="password=XXX"
+auth_hosts="159.226.27.30 passport.escience.cn"
+auth_path="/oauth2/authorize"
+#use post method to send username and password.
+auth_post=1
+auth_https=1
+interface=""
+check_hosts="220.181.112.244 baidu.com"
+check_string="159.226.190.5"
+extra_get_params="client_id=10008&redirect_uri=http%3A%2F%2F159.226.190.5%2Foauthapi%2Fcallback.php&response_type=code&theme=cstnet_wifi&pageinfo=userinfo&themeinfo=coremail"
+extra_post_params=""
+
+#Script
+status="error"
+for host in $check_hosts 
+do 
+	echo "webdial: test connection by curl $host"
+	if [ -n "$interface" ];then
+		head=$(curl -ls4 $host --retry 5 --retry-delay 3 --interface $interface)
+	else
+		head=$(curl -ls4 $host --retry 5 --retry-delay 3)
+	fi
+	if [ $? -eq 0 ]; then
+		echo "webdial: curl $host ok"
+		status="ok"
+		break
+	fi
+done
+head=`echo $head|grep $check_string`
+if [ "$status" = "error" ] || [ -n "$head" ]; then
+	#还没有认证
+	curl_cmd="curl -kLs4 --retry 5 --retry-delay 3 $extra_curl_params"
+	if [ -n "$interface" ];then
+		curl_cmd="$curl_cmd --interface $interface"
+	fi
+	echo "webdial reconnect: $host can be connected, but need to login first!"
+	if [ $auth_post -eq 1 ]; then
+		extra_post_params="$extra_post_params&$username&$password"
+	else
+		extra_get_params="$extra_get_params&$username&$password"
+	fi
+	for oath in $auth_hosts 
+	do
+		if [ $auth_https -eq 1 ];then
+			oath="https://$oath"
+		else
+			oath="http://$oath"
+		fi
+		`$curl_cmd $oath$auth_path?$extra_get_params -d $extra_post_params -o /dev/null`
+		if [ $? -eq 0 ]; then
+			echo "webdial reconnect: reconnect through gateway $oath success!"
+			break
+		else
+			echo "webdial reconnect: reconnect through gateway $oath fail!"
+		fi
+	done
+else
+	echo "webdial reconnect: no need to reconnect!"
+fi
