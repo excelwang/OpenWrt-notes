@@ -1,0 +1,2 @@
+#forward port 221 to wan ip: cnic-inner-vm centos (10.0.61.22:22)
+iptables -t nat -A PREROUTING  -p tcp --dport 221  -j DNAT --to 10.0.61.22:22
