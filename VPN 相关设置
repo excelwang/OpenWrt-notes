@@ -6,7 +6,6 @@
 	        option src 'wan'                        
 	        option proto '47'                       
 	        option name 'Allow-GRE-Protocol'           
-        	option enabled '0'
 	1.2 需要安装 kmod-nf-nathelper-extra（http://wiki.openwrt.org/doc/howto/vpn.nat.pptp）
 
 2. PPTP客户端：
