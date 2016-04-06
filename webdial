@@ -35,7 +35,7 @@ done
 head=`echo $head|grep $check_string`
 if [ "$status" = "error" ] || [ -n "$head" ]; then
 	#还没有认证
-	curl_cmd="curl -kLs4 --retry 5 --retry-delay 3 $extra_curl_params"
+	curl_cmd="curl -kLs4 --retry 5 --retry-delay 3"
 	if [ -n "$interface" ];then
 		curl_cmd="$curl_cmd --interface $interface"
 	fi

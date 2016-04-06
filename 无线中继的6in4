@@ -1,0 +1,3 @@
+无线中继的6in4
+需要禁用再启用有线接口。如：
+ifdown lab; ifup lab
