@@ -1,0 +1,8 @@
+强制6in4走无线接口
+（以下示例中的lab是一个有线wan口）
+一、禁用再启用有线接口，可以使6in4重新走无线接口。如：
+ifdown lab; sleep 5; ifup lab
+二、Local IPv4 address 可以为空，以自动获取当前WAN的IP。如果获取的IP不是想要的接口的IP，则可以：
+1.禁用再启用被读取IP的接口。如：
+ifdown lab; sleep 5; ifup lab
+如果还不行，则可尝试修改目标接口的名称为WAN。
