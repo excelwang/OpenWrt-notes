@@ -1,8 +1,17 @@
 强制6in4走无线接口
-（以下示例中的lab是一个有线wan口）
+（以下示例中的lab是一个有线wan口,wan为要走的无线接口）
+设置6in4的 peeraddr（如’216.218.221.6’）走无线接口的默认路由，如：
+#/etc/config/network
+config route
+        option interface 'wan'
+        option target '216.218.221.6'
+        option gateway '159.226.189.254'
+
+###旧解决方案
 一、禁用再启用有线接口，可以使6in4重新走无线接口。如：
 ifdown lab; sleep 5; ifup lab
 二、Local IPv4 address 可以为空，以自动获取当前WAN的IP。如果获取的IP不是想要的接口的IP，则可以：
 1.禁用再启用被读取IP的接口。如：
 ifdown lab; sleep 5; ifup lab
 如果还不行，则可尝试修改目标接口的名称为WAN。
+如果还不行，可以修改网关的默认跃点数，使有线接口的代价高于无线接口
