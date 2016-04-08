@@ -1,0 +1,45 @@
+openwrt 按域名路由
+参考：https://blog.sorz.org/p/openwrt-outwall/
+
+###一、安装相关软件
+1.更换dnsmasq为full版本：
+openwrt remove dnsmasq&&openwrt install dnsmasq-full
+对比、同步新旧配置文件/etc/config/dhcp.
+2.安装ip相关包：
+opkg install ip ipset kmod-ipt-ipset
+
+###二、系统启动时创建一个名为ucas的ipset。
+# vi /etc/rc.local
+ipset create ucas hash:ip
+
+###三、设置域名到ipset的映射：
+#vi /etc/config/dhcp
+list ipset  '/las.ac.cn/ucas'
+list ipset  '/dl.acm.org/ucas'
+google.com将同时匹配 google.com 和 plus.google.com。com将匹配所有 .com 结尾域名。
+
+###四、设置ipset到mark的映射:
+# vi /etc/firewall.user
+iptables -t mangle -A PREROUTING -m set --match-set ucas dst -j MARK --set-mark 8
+打上 mark 以后，就可以指定它们所使用的路由表了。
+mark 值可随便选，保持一致即可。若同时装有 qos-scripts，mark 可选一个较大的值，以防与其发生冲突。
+
+###五、创建路由表ucas
+#vi /etc/iproute2/rt_tables
+200 ucas
+
+###六、设置mark到路由表的映射，以及路由表到网络设备的映射：
+#新建/etc/hotplug.d/iface/99-iproute：
+#!/bin/sh
+#by huajin，ucas是网络接口名，pptp-ucas是对应的设备名
+if [ "$INTERFACE" = "ucas" ]; then
+    if [ "${ACTION}" = "ifup" ]; then
+        logger -t iproute-hotplug Interface: $INTERFACE / Action: $ACTION
+        ip route add default dev pptp-ucas table ucas #路由表到网络设备的映射
+        ip rule add fwmark 8 table ucas #mark到路由表的映射
+    elif [ "${ACTION}" = "ifdown" ]; then
+        logger -t iproute-hotplug Interface: $INTERFACE / Action: $ACTION
+        ip rule del table ucas
+    fi
+fi
+

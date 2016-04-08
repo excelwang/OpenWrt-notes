@@ -44,3 +44,10 @@ iptables -A output_rule -o ppp+ -j ACCEPT
 # This rule will allow traffic towards internet
 iptables -A forwarding_rule -i ppp+ -j ACCEPT
 iptables -A forwarding_rule -o ppp+ -j ACCEPT
+
+3.1运行客户端使用pptp服务器作为dns服务器。
+1）禁用/etc/config/dhcp的如下配置，以允许客户端的dns请求：
+option localservice     1
+2）配置/etc/ppp/options.pptpd:
+dms-dns 10.188.45.1#PPTP服务器的vpn ip
+并删掉其他ms-dns配置
