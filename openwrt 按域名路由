@@ -17,6 +17,12 @@ ipset create ucas hash:ip
 list ipset  '/las.ac.cn/ucas'
 list ipset  '/dl.acm.org/ucas'
 google.com将同时匹配 google.com 和 plus.google.com。com将匹配所有 .com 结尾域名。
+注意：
+1.修改配置后，必须/etc/init.d/dnsmasq restart,reload不管用。
+2.dnsmasq只管添加ip到upset，不管删除。因此取消某域名的upset后，需手动删除ipset中的对应：
+	ipset del [setname] [ip]
+3.部分网站，会根据cookie记忆访问者ip。因此修改配置后，需要重启浏览器，才能使cookie使用新ip。
+4.目前还不清楚dnsmasq的ip生存期过期后，会否删除ipset中对应ip。若出现奇怪的行为，可尝试手动清除/重建ipset。
 
 ###四、设置ipset到mark的映射:
 # vi /etc/firewall.user
