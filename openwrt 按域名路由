@@ -25,7 +25,7 @@ google.com将同时匹配 google.com 和 plus.google.com。com将匹配所有 .c
 4.dnsmasq的ip生存期过期后，不会自动删除ipset中对应ip。因此，需要在夜间维护时段定时清空ipset:
 #vi /etc/crontabs/root
 0 5 * * * ipset -F ucas
-
+这样，等dnsmasq的域名解析缓存失效后，会再次向外部dns请求解析相关域名，并将解析结构插入ipset。
 
 ###四、设置ipset到mark的映射:
 # vi /etc/firewall.user
@@ -51,4 +51,3 @@ if [ "$INTERFACE" = "ucas" ]; then
         ip rule del table ucas
     fi
 fi
-
