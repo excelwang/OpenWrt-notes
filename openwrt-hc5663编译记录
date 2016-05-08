@@ -1,0 +1,75 @@
+CONFIG_HAVE_IDE=y
+CONFIG_HW_HAS_PCI=y
+
+CONFIG_OF_PCI=y
+CONFIG_OF_PCI_IRQ=y
+CONFIG_PCI=y
+CONFIG_PCI_DISABLE_COMMON_QUIRKS=y
+CONFIG_PCI_DOMAINS=y
+
+
+# CONFIG_USB_EHCI_HCD is not set
+
+CONFIG_USB_MT7621_XHCI_PLATFORM=y
+CONFIG_USB_PHY=y
+CONFIG_USB_SUPPORT=y
+
+# CONFIG_USB_UHCI_HCD is not set
+CONFIG_USB_XHCI_PLATFORM=y
+CONFIG_USE_OF=y
+
+kmod-ata-marvell-sata - 4.4.7-1 - SATA support for marvell chipsets
+kmod-ata-nvidia-sata - 4.4.7-1 - Nvidia Serial ATA support
+kmod-ata-via-sata -
+
+https://github.com/hynnet/hiwifi-openwrt-HC5661-HC5761/blob/master/target/linux/ralink/modules.mk
+define KernelPackage/mtk-hw-nat
+  SUBMENU:=$(OTHER_MENU)
+  TITLE:=MT7620a Hardware nat driver
+  DEPENDS:=@TARGET_ralink_mt7620||TARGET_ralink_mt7620a_custom
+  FILES:=$(LINUX_DIR)/net/nat/hw_nat/hw_nat.ko
+endef
+
+
+CONFIG_HAVE_IDE=y
+CONFIG_HAVE_IRQ_WORK=y
+CONFIG_HAVE_MEMBLOCK=y
+CONFIG_HAVE_MEMBLOCK_NODE_MAP=y
+CONFIG_HAVE_OPROFILE=y
+CONFIG_HAVE_PERF_EVENTS=y
+CONFIG_HW_HAS_PCI=y
+
+https://github.com/hynnet/hiwifi-openwrt-HC5661-HC5761/blob/master/target/linux/ralink/mt7620/config-3.3
+CONFIG_GENERIC_PCI_IOMAP=y
+
+CONFIG_HAS_IOPORT=y
+CONFIG_HW_HAS_PCI=y
+
+CONFIG_HAVE_IDE=y
+
+CONFIG_PCI=y
+
+# CONFIG_SCSI_DMA is not set
+CONFIG_USB=m
+CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+CONFIG_USB_ARCH_HAS_XHCI=y
+CONFIG_USB_COMMON=m
+CONFIG_USB_DEVICE_CLASS=y
+CONFIG_USB_EHCI_HCD=m
+
+
+https://github.com/hynnet/hiwifi-openwrt-HC5661-HC5761/blob/master/target/linux/ralink/mt7620/profiles/hiwifi.mk
+define Profile/HC5663
+	NAME:=Hiwifi Wireless HC5663 Board
+	PACKAGES:=\
+		kmod-usb-core kmod-usb2 \
+		kmod-ledtrig-usbdev kmod-ata-core kmod-ata-ahci
+endef
+
+按域名路由
+kmod-ipt-ipset
+vpn
+kmod-nf-nathelper-extra
+
+
+
