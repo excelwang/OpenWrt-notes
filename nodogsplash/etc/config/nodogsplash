@@ -42,5 +42,9 @@ config instance
   list users_to_router 'allow tcp port 139'                               
   list users_to_router 'allow tcp port 445'                      
   list users_to_router 'allow udp port 137'                      
-  list users_to_router 'allow udp port 138'      
+  list users_to_router 'allow udp port 138'
+
+  # Bypassed macs
+  list trustedmac 'ae:23:1d:b4:52:90'
+  list trustedmac ’10:f8:2c:7e:11:cc'
   # See https://github.com/nodogsplash for a full list of available options.

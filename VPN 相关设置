@@ -18,7 +18,7 @@
         option password '90onw1ndVPN'           
         option metric '1'                      
         option server 'lab.flepr.com'           
-    2.3 配置需要走vpn线路的路由。如，访问CNIC SDC内网的VPN配置:                                           
+    2.3 配置需要走vpn线路的路由。如，访问内网的VPN配置:                                           
 	config route                                   
 	        option interface 'lab'                 
 	        option target '192.168.0.0/16'          
@@ -29,10 +29,10 @@
 	                                                
 	config route                                    
 	        option interface 'lab'                
-	        option target '159.226.51.0/24'
+	        option target '150.22.51.0/24'
 	                                                
 	config route                                  
-	        option target '159.226.100.3'          
+	        option target '100.26.100.3'          
 	        option interface 'lab'
     2.4 若要防止该VPN网络主动访问本机，需在防火墙配置中把pptp接口放到wan区；若要打通VPN网络和本地局域网，需在防火墙配置中把pptp接口放到lan区。
 
@@ -55,4 +55,4 @@ dms-dns 10.188.45.1#PPTP服务器的vpn ip
 5.VPN 连线后，服务器使用公网地址不能访问客户端。
 我遇到的这种情况，是由于客户端有多个网卡，默认网关是无线中继（调高其他网格的跃点）。奇怪的是 pptp 总是优先使用有线接口，并把vpn服务器的路由网关设置成了有线端口。由于系统使用无线中继来应答公网的访问，使用有线接口回复 vpn 服务器的公网访问，这样导致通讯失败。解决办法：
 方案一、vpn 服务器的 ip 是固定的。此时可以直接加个静态路由：指定该 ip 的网关为无线中继。
-方案二、若vpn 服务器使用的是动态域名。可使用按域名路由方案。
+方案二、若vpn 服务器使用的是动态域名。应该可以使用基于 ipset 的按域名路由方案，但已被验证无效。
