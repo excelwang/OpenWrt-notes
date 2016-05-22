@@ -1,0 +1,6 @@
+ssh 免密码登录：
+1.将公钥存储到/etc/dropbear/authorized_keys
+2.修改/etc/config/dropbear:
+option PasswordAuth 'off'
+option RootPasswordAuth 'off'
+3./etc/init.d/dropbear restart
