@@ -1,11 +1,11 @@
 1. PPTP VPN 穿透 (允许局域网中的机器连接外部PPTP VPN 服务器) 
 	1.1 放行GRE协议，相关设置如下：
-	#/etc/config/firewall
-	config rule                                     
-	        option target 'ACCEPT'                  
-	        option src 'wan'                        
-	        option proto '47'                       
-	        option name 'Allow-GRE-Protocol'           
+	uci add firewall rule
+	uci set firewall.@rule[-1].name=Allow-GRE-Protocol
+	uci set firewall.@rule[-1].src=wan
+	uci set firewall.@rule[-1].proto=47
+	uci set firewall.@rule[-1].target=ACCEPT
+	uci commit        
 	1.2 需要安装 kmod-nf-nathelper-extra（http://wiki.openwrt.org/doc/howto/vpn.nat.pptp）
 
 2. PPTP客户端：
@@ -53,6 +53,8 @@ dms-dns 10.188.45.1#PPTP服务器的vpn ip
 并删掉其他ms-dns配置
 
 5.VPN 连线后，服务器使用公网地址不能访问客户端。
-我遇到的这种情况，是由于客户端有多个网卡，默认网关是无线中继（调高其他网格的跃点）。奇怪的是 pptp 总是优先使用有线接口，并把vpn服务器的路由网关设置成了有线端口。由于系统使用无线中继来应答公网的访问，使用有线接口回复 vpn 服务器的公网访问，这样导致通讯失败。解决办法：
+我遇到的这种情况，是由于客户端有多个网卡，默认网关是无线中继（调高其他网格的跃点）。奇怪的是 pptp 总是优先使用有线接口(例如“lab”)，并把vpn服务器的路由网关设置成了有线端口。由于系统使用无线中继来应答公网的访问，使用有线接口回复 vpn 服务器的公网访问，这样导致通讯失败。解决办法：
 方案一、vpn 服务器的 ip 是固定的。此时可以直接加个静态路由：指定该 ip 的网关为无线中继。
-方案二、若vpn 服务器使用的是动态域名。应该可以使用基于 ipset 的按域名路由方案，但已被验证无效。
+方案二、有线接口设置为非默认路由（若可以）：#/etc/config/network #lab
+	option defaultroute ‘0’
+方案三、若vpn 服务器使用的是动态域名。应该可以使用基于 ipset 的按域名路由方案，但已被验证无效。

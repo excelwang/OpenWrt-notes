@@ -1,5 +1,5 @@
 配置 root 可写，匿名用户只读的方法:
-1.执行：smbpasswd -a root，以配置root的密码（推荐为admin）
+1.执行：smbpasswd -a root，以配置root的密码
 2.编辑模板配置/etc/samba/smb.conf.template
 	#invalid users = root（注释掉）
 	writeable = no
@@ -7,8 +7,8 @@
  	local master = no（保持该项配置为no，否则局域网中的电脑不能发现samba服务。）
 3.编辑共享目录配置/etc/config/samba
 	option read_only 'yes' #Readonly
-    option users 'root,nobody' #Allow users: root,nobody
-    option guest_ok 'yes' #Allow guests
+	option users 'root,nobody' #Allow users: root,nobody
+	option guest_ok 'yes' #Allow guests
 4.注意：切莫在模板中配置valid user。否则会导致共享目录的用户配置失效。
 
 配置使用root的别名admin登录：
