@@ -1,4 +1,5 @@
-一、由于路由开机后有线接口（lab）最先得到配置，故6in4（wan6）默认连有线接口，
+一、无线中继和多WAN配置
+由于路由开机后有线接口（lab）最先得到配置，故6in4（wan6）默认连有线接口，
 欲使其重新连无线接口（wan），应取消有线接口的默认路由：#/etc/config/network #lab
 	option defaultroute ‘0’
 这样就可以。
@@ -16,4 +17,6 @@ config route
 或手动删：route del -host 216.21.22.1
 需谨防随着网卡的重启路由记录重新被6in4插入。
 
-二、wan6 的Local IPv4 address为空时，自动设置为本机出口IP。因此调整好路由即可。
+二、wan6 的Local IPv4 address为空时，将设置为本机默认路由对应网卡IP。因此调整好路由即可。
+
+三、the dns server of 6in4 can anti dns acttack.

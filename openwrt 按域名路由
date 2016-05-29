@@ -6,11 +6,19 @@ openwrt 按域名路由
 openwrt remove dnsmasq&&openwrt install dnsmasq-full
 对比、同步新旧配置文件/etc/config/dhcp.
 2.安装ip相关包：
-opkg install ip ipset kmod-ipt-ipset
+opkg install ip kmod-ipt-ipset
 
-###二、系统启动时创建一个名为ucas的ipset。
-# vi /etc/rc.local
-ipset create ucas hash:ip
+###二、创建一个名为ucas的ipset。
+uci add firewall ipset
+uci set firewall.@ipset[-1].name=ucas
+uci set firewall.@ipset[-1].match=ip
+uci set firewall.@ipset[-1].storage=hash
+uci set firewall.@ipset[-1].family=ipv4
+uci set firewall.@ipset[-1].timeout=86400
+uci commit
+
+或者系统启动时# vi /etc/rc.local
+ipset create ucas hash:ip（需安装 ipset）
 
 ###三、设置域名到ipset的映射：
 #vi /etc/config/dhcp
@@ -19,19 +27,19 @@ list ipset  '/dl.acm.org/ucas'
 google.com将同时匹配 google.com 和 plus.google.com。com将匹配所有 .com 结尾域名。
 注意：
 1.修改配置后，必须/etc/init.d/dnsmasq restart,reload不管用。
-2.dnsmasq只管添加ip到upset，不管删除。因此取消某域名的upset后，需手动删除ipset中的对应：
+2.dnsmasq只管添加ip到upset，不管删除。因此取消某域名的ipset后，需手动删除ipset中的对应：
 	ipset del [setname] [ip]
 3.部分网站，会根据cookie记忆访问者ip。因此修改配置后，需要重启浏览器，才能使cookie使用新ip。
-4.dnsmasq的ip生存期过期后，不会自动删除ipset中对应ip。因此，需要在夜间维护时段定时清空ipset:
+4.dnsmasq的ip生存期过期后，不会自动删除ipset中对应ip。因此若是在/etc/rc.local 中创建的ipset，需要在夜间维护时段定时清空ipset:
 #vi /etc/crontabs/root
 0 5 * * * ipset -F ucas
 这样，等dnsmasq的域名解析缓存失效(生存期一般很短：秒级)后，会再次向外部dns请求解析相关域名，并将解析结构插入ipset。
 
 ###四、设置ipset到mark的映射:
-# vi /etc/firewall.user
+/etc/config/firewall中的配置不能满足需求，需手动添加规则：# vi /etc/firewall.user
 iptables -t mangle -A PREROUTING -m set --match-set ucas dst -j MARK --set-mark 8
-打上 mark 以后，就可以指定它们所使用的路由表了。
-mark 值可随便选，保持一致即可。若同时装有 qos-scripts，mark 可选一个较大的值，以防与其发生冲突。
+
+打上 mark 以后，就可以指定它们所使用的路由表了。mark 值可随便选，保持一致即可。若同时装有 qos-scripts，mark 可选一个较大的值，以防与其发生冲突。
 
 ###五、创建路由表ucas
 #vi /etc/iproute2/rt_tables
@@ -45,11 +53,13 @@ if [ "$INTERFACE" = "ucas" ]; then
     if [ "${ACTION}" = "ifup" ]; then
         logger -t iproute-hotplug Interface: $INTERFACE / Action: $ACTION
         ip route add default dev pptp-ucas table ucas #路由表到网络设备的映射
-        ip rule add fwmark 8 table ucas #mark到路由表的映射
+        ip rule add fwmark 0x8 table ucas #mark到路由表的映射
     elif [ "${ACTION}" = "ifdown" ]; then
         logger -t iproute-hotplug Interface: $INTERFACE / Action: $ACTION
         ip rule del table ucas
     fi
 fi
+
+测试：ip route list table ucas
 
 ###七、若提供 vpn 服务，则 vpn 客户端应使用 本服务器 作为 dns server,这样解析出来的 ip 才能被 dnsmasq 归类到相应的 ipset
