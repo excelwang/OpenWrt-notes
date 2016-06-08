@@ -3,7 +3,7 @@ openwrt 按域名路由
 
 ###一、安装相关软件
 1.更换dnsmasq为full版本：
-openwrt remove dnsmasq&&openwrt install dnsmasq-full
+opkg remove dnsmasq&&opkg install dnsmasq-full
 对比、同步新旧配置文件/etc/config/dhcp.
 2.安装ip相关包：
 opkg install ip kmod-ipt-ipset

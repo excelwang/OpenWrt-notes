@@ -1,0 +1,25 @@
+#forward port 9342 to wan ip
+iptables -t nat -A PREROUTING  -p tcp --dport 9342  -j DNAT --to 172.0.1.22:212
+
+##或者在/etc/config/firewall里设置：
+#wan ip
+config redirect
+        option src 'wan'
+        option src_dport '9342'
+        option proto 'tcp'
+        option dest 'wan'
+        option dest_ip '172.0.1.22'
+        option dest_port '212'
+        option name 'innervm-centos-sshd'
+        option target 'DNAT'
+
+#lan ip
+config redirect
+        option src 'wan'
+        option src_dport '9992'
+        option proto 'tcp'
+        option dest 'lan'
+        option dest_ip '192.168.1.11'
+        option dest_port '992'
+        option name 'lab-arch-sshd'
+        option target 'DNAT'
