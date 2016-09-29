@@ -6,7 +6,7 @@ openwrt 按域名路由
 opkg remove dnsmasq&&opkg install dnsmasq-full
 对比、同步新旧配置文件/etc/config/dhcp.
 2.安装ip相关包：
-opkg install ip kmod-ipt-ipset
+opkg install ip ipset kmod-ipt-ipset
 
 ###二、创建一个名为ucas的ipset。
 uci add firewall ipset
