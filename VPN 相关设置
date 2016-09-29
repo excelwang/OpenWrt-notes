@@ -14,10 +14,10 @@
 	#/etc/config/network
 	config interface 'lab'                         
         option proto 'pptp'                     
-        option username 'excelwang'            
-        option password '90onw1ndVPN'           
+        option username 'xxxx'            
+        option password 'xxxx'           
         option metric '1'                      
-        option server 'lab.flepr.com'           
+        option server 'xxxx'           
     2.3 配置需要走vpn线路的路由。如，访问内网的VPN配置:                                           
 	config route                                   
 	        option interface 'lab'                 
