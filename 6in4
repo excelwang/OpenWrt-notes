@@ -20,3 +20,10 @@ config route
 二、wan6 的Local IPv4 address为空时，将设置为本机默认路由对应网卡IP。因此调整好路由即可。
 
 三、the dns server of 6in4 can anti dns acttack.
+
+四、设置br-lan口的ipv6配置
+IPv6 assignment length：64
+Announced DNS servers：<br-lan的ipv6地址>（若不设置，客户端禁用ipv4后，不能进行域名解析）
+Router Advertisement-Service：server
+DHCPv6-Service：disabled
+NDP-Proxy：disabled
