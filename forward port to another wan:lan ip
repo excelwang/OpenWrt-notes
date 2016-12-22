@@ -1,6 +1,10 @@
 #forward port 9342 to wan ip
 iptables -t nat -A PREROUTING  -p tcp --dport 9342  -j DNAT --to 172.0.1.22:212
 
+#forward lan port to another lan port
+iptables -t nat -A PREROUTING -d 192.168.1.1 -p tcp --dport 5555 -j DNAT --to-destination 192.168.1.233:22
+iptables -t nat -A POSTROUTING -d 192.168.1.233 -p tcp --dport 22 -j SNAT --to 192.168.1.1
+
 ##或者在/etc/config/firewall里设置：
 #wan ip
 config redirect
