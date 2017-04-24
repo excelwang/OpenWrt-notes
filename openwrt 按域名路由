@@ -37,7 +37,12 @@ google.com将同时匹配 google.com 和 plus.google.com。com将匹配所有 .c
 
 ###四、设置ipset到mark的映射:
 /etc/config/firewall中的配置不能满足需求，需手动添加规则：# vi /etc/firewall.user
-iptables -t mangle -A PREROUTING -m set --match-set ucas dst -j MARK --set-mark 8
+
+#req by routing by ipset
+iptables -t mangle -N fwmark
+iptables -t mangle -A PREROUTING -j fwmark
+iptables -t mangle -A OUTPUT -j fwmark
+iptables -t mangle -A fwmark -m set --match-set ucas dst -j MARK --set-mark 0x8
 
 打上 mark 以后，就可以指定它们所使用的路由表了。mark 值可随便选，保持一致即可。若同时装有 qos-scripts，mark 可选一个较大的值，以防与其发生冲突。
 
