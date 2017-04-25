@@ -1,3 +1,0 @@
-dhcp
-
-实验室的dhcp需要开启Use broadcast flag，才能实时获取ip。
