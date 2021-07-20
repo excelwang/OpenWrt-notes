@@ -7,6 +7,7 @@
 *设置Bind IP/Interface为lan口ip*
 
 2.配置/etc/config/firewall，新增：
+
 `
 config rule
 
