@@ -8,7 +8,7 @@
 
 2.配置/etc/config/firewall，新增：
 
-`
+
 config rule
 
         option target 'ACCEPT'
@@ -22,4 +22,4 @@ config rule
         option proto 'udp'
         
         option dest_ip '224.0.0.0/4'
-`
+
